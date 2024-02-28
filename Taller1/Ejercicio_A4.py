@@ -1,10 +1,16 @@
-def calcular_resistencia(pt100_temperatura):
-    resistencia_0 = 100.0
-    coeficiente_temperatura = 0.00385
+def calcular_resistencia(temp_rtd):
+    R0 = 100.0  # Valor de resistencia a 0°C
+    A = 3.9083e-3
+    B = -5.775e-7
+    C = -4.183e-12
 
-    resistencia = resistencia_0 * (1 + coeficiente_temperatura * pt100_temperatura)
-    return resistencia
+    if temp_rtd >= 0:
+        Rt = R0 * (1 + A * temp_rtd + B * temp_rtd**2)
+    else:
+        Rt = R0 * (1 + A * temp_rtd + B * temp_rtd**2 + C * (temp_rtd - 100) * temp_rtd**3)
 
-temperatura = 30.0
-resistencia_calculada = calcular_resistencia(temperatura)
-print("Resistencia a", temperatura, "grados Celsius:", resistencia_calculada)
+    return Rt
+
+temperatura = float(input("Ingrese la temperatura RTD en grados Celsius: "))
+resistencia = calcular_resistencia(temperatura)
+print(f"La resistencia de la RTD a {temperatura}°C es {resistencia} ohmios.")
