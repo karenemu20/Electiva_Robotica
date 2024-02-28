@@ -30,18 +30,15 @@ def main():
     zeta = float(input("Ingrese el coeficiente de amortiguamiento (zeta) del sistema: "))
     K = float(input("Ingrese la ganancia (K) del sistema: "))
 
-    #  función de transferencia
+    # función de transferencia
     num, den = funcion_transferencia_segundo_orden(w_n, zeta)
-    sys = signal.TransferFunction(num, den)#cambio del ejercicio anterior
-
-    # Ganaciaa del sistema
-    sys.num *= K
+    sys = signal.TransferFunction(K * num, den)
 
     # tipo de sistema
     tipo = tipo_sistema(zeta)
     print(f"El sistema es: {tipo}")
 
-    #  respuesta del sistema 
+    # respuesta del sistema
     t = np.linspace(0, 20, 1000)
     _, y, _ = signal.lsim(sys, T=t)
     graficar_respuesta(t, y, tipo)
