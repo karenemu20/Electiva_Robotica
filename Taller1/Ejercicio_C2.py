@@ -32,7 +32,7 @@ def main():
 
     # función de transferencia
     num, den = funcion_transferencia_segundo_orden(w_n, zeta)
-    sys = signal.TransferFunction(K * num, den)
+    sys = signal.TransferFunction([K * coeficiente for coeficiente in num], den)
 
     # tipo de sistema
     tipo = tipo_sistema(zeta)
@@ -40,7 +40,14 @@ def main():
 
     # respuesta del sistema
     t = np.linspace(0, 20, 1000)
-    _, y, _ = signal.lsim(sys, T=t)
+
+    # Generar entrada paso para el sistema
+    _, u = signal.step(sys, T=t)
+
+    # Calcular la respuesta del sistema
+    _, y, _ = signal.lsim(sys, U=u, T=t)
+
+    # Graficar la respuesta
     graficar_respuesta(t, y, tipo)
 
 if __name__ == "__main__":
